@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: exotel-mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: exotel_db
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-db-data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: exotel-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=exotel_db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=password
+      - EXOTEL_ACCOUNT_SID=${EXOTEL_ACCOUNT_SID:-your_account_sid}
+      - EXOTEL_API_KEY=${EXOTEL_API_KEY:-your_api_key}
+      - EXOTEL_API_TOKEN=${EXOTEL_API_TOKEN:-your_api_token}
+      - EXOTEL_BASE_URL=${EXOTEL_BASE_URL:-https://api.exotel.com}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: exotel-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api
+    depends_on:
+      - backend
+
+volumes:
+  mysql-db-data:

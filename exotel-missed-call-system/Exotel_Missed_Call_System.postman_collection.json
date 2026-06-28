@@ -1,0 +1,343 @@
+{
+	"info": {
+		"_postman_id": "4b68ef21-6c2e-4b47-ab87-0b1a2c3d4e5f",
+		"name": "Exotel Missed Call Management System",
+		"description": "API collection for testing the Exotel Missed Call Management System endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Exotel Webhooks",
+			"item": [
+				{
+					"name": "Simulate Webhook (Form Urlencoded)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "CallSid",
+									"value": "postman-call-sid-urlencoded-12345",
+									"type": "text"
+								},
+								{
+									"key": "From",
+									"value": "+919876543211",
+									"type": "text"
+								},
+								{
+									"key": "To",
+									"value": "+918047101122",
+									"type": "text"
+								},
+								{
+									"key": "Status",
+									"value": "missed",
+									"type": "text"
+								},
+								{
+									"key": "Direction",
+									"value": "incoming",
+									"type": "text"
+								},
+								{
+									"key": "Duration",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "StartTime",
+									"value": "2026-06-28 12:00:00",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/exotel/webhook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"exotel",
+								"webhook"
+							]
+						},
+						"description": "Simulates Exotel webhook POST containing Form-Urlencoded fields."
+					},
+					"response": []
+				},
+				{
+					"name": "Simulate Webhook (JSON)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"callSid\": \"postman-call-sid-json-98765\",\n    \"from\": \"+919876543212\",\n    \"to\": \"+918047101122\",\n    \"status\": \"completed\",\n    \"direction\": \"incoming\",\n    \"duration\": \"15\",\n    \"startTime\": \"2026-06-28 12:05:00\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/exotel/webhook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"exotel",
+								"webhook"
+							]
+						},
+						"description": "Simulates Exotel webhook POST containing JSON fields."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calls Management REST APIs",
+			"item": [
+				{
+					"name": "Get Calls List (Paginated, Sorted)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/calls?page=0&size=10&sortBy=startTime&sortDir=desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "sortBy",
+									"value": "startTime"
+								},
+								{
+									"key": "sortDir",
+									"value": "desc"
+								}
+							]
+						},
+						"description": "Fetches a paginated, sorted list of call log entries."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Call By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/calls/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls",
+								"1"
+							]
+						},
+						"description": "Fetches details of a specific call log using its database numeric ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Calls Log",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/calls/search?q=98765",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "98765"
+								}
+							]
+						},
+						"description": "Searches calls logs by keyword (maps caller number, exotel number, or Call SID)."
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Calls Log",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/calls/filter?status=missed&direction=incoming&startTime=2026-06-28 00:00:00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "missed"
+								},
+								{
+									"key": "direction",
+									"value": "incoming"
+								},
+								{
+									"key": "startTime",
+									"value": "2026-06-28 00:00:00"
+								}
+							]
+						},
+						"description": "Filters call logs based on criteria parameters."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Call Log Details",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"callerNumber\": \"+919876543211\",\n    \"exotelNumber\": \"+918047101122\",\n    \"callStatus\": \"completed\",\n    \"direction\": \"incoming\",\n    \"duration\": 18\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/calls/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls",
+								"1"
+							]
+						},
+						"description": "Updates fields of an existing call record."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Call Record",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/calls/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls",
+								"1"
+							]
+						},
+						"description": "Deletes a call log entry by ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Aggregate Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/calls/statistics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"calls",
+								"statistics"
+							]
+						},
+						"description": "Aggregates stats count of calls grouped by status, daily count trend for charts, etc."
+					},
+					"response": []
+				},
+				{
+					"name": "Trigger Historical Sync",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/exotel/sync",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"exotel",
+								"sync"
+							]
+						},
+						"description": "Triggers historical synchronization from Exotel API."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

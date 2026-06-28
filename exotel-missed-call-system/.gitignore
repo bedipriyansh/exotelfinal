@@ -1,0 +1,35 @@
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Maven
+backend/target/
+backend/.mvn/
+backend/.project
+backend/.classpath
+backend/.settings/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/local.env
+frontend/.eslintcache
+frontend/package-lock.json
+
+# Logs
+*.log
+logs/
+
+# Env & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS Files
+.DS_Store
+Thumbs.db
