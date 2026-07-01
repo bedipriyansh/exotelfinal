@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,6 +73,23 @@ public class ExotelWebhookControllerTests {
         mockMvc.perform(post("/api/exotel/webhook")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.callSid").value("test-sid-123"))
+                .andExpect(jsonPath("$.callerNumber").value("+919999999999"));
+    }
+
+    @Test
+    void handleGetWebhook_Success() throws Exception {
+        when(service.saveWebhookCall(any(WebhookPayloadDto.class))).thenReturn(expectedDto);
+
+        mockMvc.perform(get("/api/exotel/webhook")
+                        .param("CallSid", "test-sid-123")
+                        .param("From", "+919999999999")
+                        .param("To", "+918888888888")
+                        .param("Status", "missed")
+                        .param("Direction", "incoming")
+                        .param("Duration", "0")
+                        .param("StartTime", "2026-07-01 22:00:00"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.callSid").value("test-sid-123"))
                 .andExpect(jsonPath("$.callerNumber").value("+919999999999"));

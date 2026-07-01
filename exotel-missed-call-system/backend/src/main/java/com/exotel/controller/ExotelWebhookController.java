@@ -20,6 +20,15 @@ public class ExotelWebhookController {
 
     private final MissedCallService service;
 
+    @Operation(summary = "Handle Exotel Webhook via GET query parameters")
+    @GetMapping(value = "/webhook")
+    public ResponseEntity<MissedCallDto> handleGetWebhook(WebhookPayloadDto payload) {
+        log.info("Received Exotel GET Webhook. CallSid: {}, From: {}, Status: {}", 
+                payload.getResolvedCallSid(), payload.getResolvedFrom(), payload.getResolvedStatus());
+        MissedCallDto result = service.saveWebhookCall(payload);
+        return ResponseEntity.ok(result);
+    }
+
     @Operation(summary = "Handle Exotel Webhook via application/x-www-form-urlencoded")
     @PostMapping(value = "/webhook", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<MissedCallDto> handleFormWebhook(WebhookPayloadDto payload) {
